@@ -5,7 +5,7 @@ import java.net.Socket;
 
 public class ServerThread extends Thread{
 
-    static File filePath = new File("");
+    static File filePath = new File(System.getProperty("user.dir") + System.getProperty("file.separator") + "Server" + System.getProperty("file.separator"));
 
     static String fileName = "";
 
@@ -40,6 +40,7 @@ public class ServerThread extends Thread{
 //                throw new RuntimeException(e);
             }
 
+
             if (line.equals("server Close")) {
                 System.out.println(socket.getInetAddress() + "가 로그아웃 하였습니다");
                 try {
@@ -58,9 +59,11 @@ public class ServerThread extends Thread{
             }else {
 
                 String[] Cmd = line.split(" ", 2);
-                fileName = Cmd[0];
+                String[] filename = Cmd[0].split(System.getProperty("file.separator"));
+                fileName = filename[filename.length - 1];
                 String cmd = Cmd[1];
 
+                System.out.println(fileName);
 
                 try {
                     if (cmd.equals("upload")) {
@@ -110,7 +113,7 @@ public class ServerThread extends Thread{
 
     // 서버에 있는 파일 목록 및 파일 크기를 보내줌
     public void showFileList() throws IOException {
-        File ServerFile = new File("/Users/bjigeon/Desktop/Server/");
+        File ServerFile = filePath;
         File[] fileList = ServerFile.listFiles();
 
         dos.writeInt(fileList.length);
@@ -124,7 +127,7 @@ public class ServerThread extends Thread{
     //클라 기준 업로드
     public static void uploadFile() throws IOException {
 
-        File serverFile = new File("/Users/bjigeon/Desktop/Server/" + fileName);
+        File serverFile = new File(filePath + System.getProperty("file.separator") + fileName);
 
         long size = dis.readLong();
 
@@ -187,7 +190,7 @@ public class ServerThread extends Thread{
     //클라에서 다운을 요청한 파일을 보내줌
     public void downloadFile() throws IOException {
 
-        filePath = new File("/Users/bjigeon/Desktop/Server/" + fileName);
+        filePath = new File(filePath + System.getProperty("file.separator") + fileName);
 
         dos.writeLong(filePath.length());
 

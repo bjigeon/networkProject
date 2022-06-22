@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.io.*;
 
 public class ClientMain {
-    Socket socket = new Socket("127.0.0.1",7777);
+    Socket socket = new Socket("127.0.0.1",9999);
 
     static File filePath = new File("");
 
@@ -58,7 +58,7 @@ public class ClientMain {
         }
         //빈칸 없음
         else {
-            tmpPath = path.split("/");
+            tmpPath = path.split(System.getProperty("user.dir"));
 //            tmpPath = path.split(filePath.pathSeparator);
 
             fileName = tmpPath[tmpPath.length - 1];
@@ -177,8 +177,6 @@ public class ClientMain {
 
     //서버에 있는 파일을 받아 오는 코드
     public void download(String filename) throws IOException {
-        System.out.println("다운로드 진입");
-
         fileName = filename;
         dos.writeUTF(fileName + " " + "download");
         dos.flush();
